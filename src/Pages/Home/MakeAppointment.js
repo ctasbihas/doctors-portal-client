@@ -5,7 +5,7 @@ import PrimaryButton from '../Shared/PrimaryButton';
 
 const MakeAppointment = () => {
     return (
-        <section className='flex justify-center items-center mt-44 '
+        <section className='flex justify-center items-center mt-44 h-[520px]'
             style={{
                 background: `url(${appointment})`
         }}>
