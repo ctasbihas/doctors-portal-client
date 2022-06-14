@@ -29,7 +29,7 @@ const Services = () => {
     ];
 
     return (
-        <div className='mt-32'>
+        <div className=''>
             <div className='text-center uppercase'>
                 <h2 className='text-secondary text-xl font-bold'>Our Services</h2>
                 <h1 className='text-4xl'>Services we provide</h1>
@@ -42,7 +42,7 @@ const Services = () => {
                     />)
                 }
             </div>
-            <div className='mt-24'>
+            <div className='mt-36'>
                 <DentalCare/>
             </div>
         </div>
