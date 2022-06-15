@@ -23,7 +23,7 @@ const Footer = () => {
                 </div>
             </div>
             <div className='my-10 text-center'>
-                <p>Copyright © {(new Date().getFullYear())} - All right reserved by Doctors Portal</p>
+                <p>Copyright © {(new Date().getFullYear())} - All right reserved</p>
             </div>
         </footer>
     );
