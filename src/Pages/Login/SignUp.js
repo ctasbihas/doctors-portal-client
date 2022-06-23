@@ -1,37 +1,57 @@
 import React from 'react';
-import { useSignInWithEmailAndPassword, useSignInWithGoogle } from 'react-firebase-hooks/auth';
-import { useForm } from 'react-hook-form';
+import { useCreateUserWithEmailAndPassword, useSignInWithGoogle, useUpdateProfile } from 'react-firebase-hooks/auth';
 import { Link, useNavigate } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
 import auth from '../../firebase.init';
 
-const Login = () => {
+const SignUp = () => {
     const [signInWithGoogle, gUser, gLoading, gError] = useSignInWithGoogle(auth);
-    const [signInWithEmailAndPassword, eUser, eLoading, eError,] = useSignInWithEmailAndPassword(auth);
+    const [createUserWithEmailAndPassword, eUser, eLoading, eError,] = useCreateUserWithEmailAndPassword(auth);
+    const [updateProfile, updating, error] = useUpdateProfile(auth);
     const { register, formState: { errors }, handleSubmit } = useForm();
     const navigate = useNavigate();
     let errorMessage;
 
-    if (gUser) {
-        console.log(gUser.user);
+    if (gUser || eUser) {
+        console.log(gUser?.user || eUser?.user);
     }
-    if (eError || gError) {
-        errorMessage = <p className='text-red-500'>{eError?.message || gError?.message}</p>
+    if (eError || gError || error) {
+        errorMessage = <p className='text-red-500'>{eError?.message || gError?.message || error?.message}</p>
     }
 
-    const onSubmit = data => {
-        signInWithEmailAndPassword(data.email, data.password);
-        navigate('/appointment')
+    const onSubmit = async data => {
+        await createUserWithEmailAndPassword(data.email, data.password);
+        await updateProfile({ displayName: data.name });
+        navigate('/appointment');
     };
-
     return (
         <div className='flex  justify-center items-center'>
             <div className="hero  w-1/2">
                 <div className="hero-content flex-col w-full">
                     <div className="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
                         <div className="card-body">
-                            <h2 className="text-3xl text-center">Login</h2>
+                            <h2 className="text-3xl text-center">Sign Up</h2>
                             <form onSubmit={handleSubmit(onSubmit)}>
 
+                                <div className="form-control">
+                                    <label className="label">
+                                        <span className="label-text">Name</span>
+                                    </label>
+                                    <input
+                                        type="text"
+                                        placeholder="Your name"
+                                        className="input input-bordered"
+                                        {...register("name", {
+                                            required: {
+                                                value: true,
+                                                message: 'Name is required'
+                                            }
+                                        })}
+                                    />
+                                    <label className="label">
+                                        {errors.name?.type === 'required' && <span className="label-text-alt text-red-500">{errors.name.message}</span>}
+                                    </label>
+                                </div>
                                 <div className="form-control">
                                     <label className="label">
                                         <span className="label-text">Email</span>
@@ -85,11 +105,11 @@ const Login = () => {
                                 </div>
                                 {errorMessage}
                                 <div className="form-control">
-                                    <button type='submit' className={eLoading ? "btn btn-accent loading" : "btn btn-accent"}>Login</button>
+                                    <button type='submit' className={eLoading ? "btn btn-accent loading" : "btn btn-accent"}>Sign up</button>
                                 </div>
                             </form>
                             <label className="label">
-                                New to Doctors Portal? <Link to="/signup" className="text-secondary">Create new account</Link>
+                                <p>Already have an account? <Link to="/login" className="text-secondary">Please login</Link></p>
                             </label>
                             <div className="divider">OR</div>
                             <button
@@ -105,4 +125,4 @@ const Login = () => {
     );
 };
 
-export default Login;
+export default SignUp;
