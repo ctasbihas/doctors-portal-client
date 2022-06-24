@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { useSignInWithEmailAndPassword, useSignInWithGoogle } from 'react-firebase-hooks/auth';
+import React, { useEffect, useState } from 'react';
+import { useSendPasswordResetEmail, useSignInWithEmailAndPassword, useSignInWithGoogle } from 'react-firebase-hooks/auth';
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import auth from '../../firebase.init';
@@ -7,7 +7,9 @@ import auth from '../../firebase.init';
 const Login = () => {
     const [signInWithGoogle, gUser, gLoading, gError] = useSignInWithGoogle(auth);
     const [signInWithEmailAndPassword, eUser, eLoading, eError,] = useSignInWithEmailAndPassword(auth);
+    const [sendPasswordResetEmail, sending, error] = useSendPasswordResetEmail(auth);
     const { register, formState: { errors }, handleSubmit } = useForm();
+    const [email, setEmail] = useState('');
     const navigate = useNavigate();
     const location = useLocation();
     const from = location.state?.from?.pathname || "/";
@@ -25,6 +27,9 @@ const Login = () => {
     const onSubmit = data => {
         signInWithEmailAndPassword(data.email, data.password);
     };
+    const resetEmail = async () => {
+        await sendPasswordResetEmail(email);
+    }
 
     return (
         <div className='flex  justify-center items-center'>
@@ -53,6 +58,7 @@ const Login = () => {
                                                 message: 'Provide a valid email'
                                             }
                                         })}
+                                        onChange={(e) => setEmail(e.target.value)}
                                     />
                                     <label className="label">
                                         {errors.email?.type === 'required' && <span className="label-text-alt text-red-500">{errors.email.message}</span>}
@@ -83,7 +89,9 @@ const Login = () => {
                                         {errors.password?.type === 'minLength' && <span className="label-text-alt text-red-500">{errors.password.message}</span>}
                                     </label>
                                     <label className="label my-2">
-                                        <a href="#" className="label-text-alt link link-hover">Forgot password?</a>
+                                        <button
+                                            onClick={resetEmail}
+                                            className="label-text-alt link link-hover">Forgot password?</button>
                                     </label>
                                 </div>
                                 {errorMessage}

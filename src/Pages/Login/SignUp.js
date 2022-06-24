@@ -1,5 +1,5 @@
 import React from 'react';
-import { useCreateUserWithEmailAndPassword, useSignInWithGoogle, useUpdateProfile } from 'react-firebase-hooks/auth';
+import { useCreateUserWithEmailAndPassword, useSendEmailVerification, useSignInWithGoogle, useUpdateProfile } from 'react-firebase-hooks/auth';
 import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import auth from '../../firebase.init';
@@ -8,13 +8,11 @@ const SignUp = () => {
     const [signInWithGoogle, gUser, gLoading, gError] = useSignInWithGoogle(auth);
     const [createUserWithEmailAndPassword, eUser, eLoading, eError,] = useCreateUserWithEmailAndPassword(auth);
     const [updateProfile, updating, error] = useUpdateProfile(auth);
+    const [sendEmailVerification] = useSendEmailVerification(auth);
     const { register, formState: { errors }, handleSubmit } = useForm();
     const navigate = useNavigate();
     let errorMessage;
 
-    if (gUser || eUser) {
-        console.log(gUser?.user || eUser?.user);
-    }
     if (eError || gError || error) {
         errorMessage = <p className='text-red-500'>{eError?.message || gError?.message || error?.message}</p>
     }
@@ -22,6 +20,7 @@ const SignUp = () => {
     const onSubmit = async data => {
         await createUserWithEmailAndPassword(data.email, data.password);
         await updateProfile({ displayName: data.name });
+        await sendEmailVerification();
         navigate('/appointment');
     };
     return (
