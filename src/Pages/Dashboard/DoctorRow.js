@@ -5,22 +5,22 @@ const DoctorRow = ({ doctor, index, refetch }) => {
     const { img, name, specialty, email } = doctor;
 
     const handleDelate = (email) => {
-        fetch(`http://localhost:5000/doctor/${email}`, {
+        fetch(`https://powerful-sea-80000.herokuapp.com/doctor/${email}`, {
             method: 'DELETE',
             headers: {
                 authorization: `Bearer ${localStorage.getItem('accessToken')}`
             }
         })
-        .then(res => res.json())
+            .then(res => res.json())
             .then(data => {
                 console.log(data);
                 if (data.deletedCount) {
                     toast.success(`Doctor ${name} is deleted`)
                     refetch()
                 }
-        })
+            })
     }
-    
+
     return (
         <tr>
             <th>

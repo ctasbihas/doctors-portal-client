@@ -6,7 +6,7 @@ import Loading from '../Shared/Loading';
 
 const AddDoctor = () => {
     const { register, formState: { errors }, handleSubmit, reset } = useForm();
-    const { data: services, isLoading } = useQuery('services', () => fetch('http://localhost:5000/service').then(res => res.json()));
+    const { data: services, isLoading } = useQuery('services', () => fetch('https://powerful-sea-80000.herokuapp.com/service').then(res => res.json()));
     const imageStorageKey = '8a36f56fdb1cf4aa3ab1b854ca4c1199';
 
     if (isLoading) {
@@ -31,7 +31,7 @@ const AddDoctor = () => {
                         specialty: data.specialty,
                         img: img
                     };
-                    fetch('http://localhost:5000/doctor', {
+                    fetch('https://powerful-sea-80000.herokuapp.com/doctor', {
                         method: 'POST',
                         headers: {
                             'content-type': 'application/json',
