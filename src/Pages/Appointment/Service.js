@@ -6,20 +6,19 @@ const Service = ({ service, setTreatment }) => {
         <div className="card lg:max-w-lg bg-base-100 shadow-xl">
             <div className="card-body text-center">
                 <h2 className="text-xl font-bold text-secondary">{name}</h2>
-                <p className='text-sm'>
-                    {
-                        slots.length
-                            ? <span>{slots[0]}</span>
-                            : <span>No slots available today</span>
-                    }
-                </p>
+                <p>{
+                    slots.length > 0
+                        ? <span>{slots[0]}</span>
+                        : <span className='text-red-500'>Try another date.</span>
+                }</p>
                 <p>{slots.length} {slots.length > 1 ? 'spaces' : 'space'} available</p>
                 <div className="card-actions justify-center">
                     <label
+                        htmlFor="booking-modal"
                         disabled={slots.length === 0}
                         onClick={() => setTreatment(service)}
-                        htmlFor="booking-modal"
-                        className="btn btn-primary text-white font-bold bg-gradient-to-r from-secondary to-primary">Book appointment</label>
+                        className="btn btn-sm btn-secondary text-white uppercase bg-gradient-to-r from-secondary to-primary"
+                    >Book Appointment</label>
                 </div>
             </div>
         </div>

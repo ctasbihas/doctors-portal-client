@@ -1,29 +1,36 @@
 import React from 'react';
+import footer from '../../assets/images/footer.png';
 
 const Footer = () => {
     return (
-        <footer className="p-10 bg-neutral text-neutral-content">
+        <footer style={{
+            background: `url(${footer})`,
+            backgroundSize: 'cover'
+        }} className="p-10">
             <div className='footer'>
                 <div>
                     <span className="footer-title">Services</span>
-                    <a className="link link-hover">Emergency Checkup</a>
-                    <a className="link link-hover">Monthly Checkup</a>
-                    <a className="link link-hover">Weekly Checkup</a>
-                    <a className="link link-hover">Deep Checkup</a>
+                    <a className="link link-hover">Branding</a>
+                    <a className="link link-hover">Design</a>
+                    <a className="link link-hover">Marketing</a>
+                    <a className="link link-hover">Advertisement</a>
                 </div>
                 <div>
-                    <span className="footer-title">ORAL HEALTH</span>
-                    <a className="link link-hover">Fluoride Treatment</a>
-                    <a className="link link-hover">Cavity Filling</a>
-                    <a className="link link-hover">Teeth Whitening</a>
+                    <span className="footer-title">Company</span>
+                    <a className="link link-hover">About us</a>
+                    <a className="link link-hover">Contact</a>
+                    <a className="link link-hover">Jobs</a>
+                    <a className="link link-hover">Press kit</a>
                 </div>
                 <div>
-                    <span className="footer-title">OUR ADDRESS</span>
-                    <a className="link link-hover">New York - 101010 Hudson</a>
+                    <span className="footer-title">Legal</span>
+                    <a className="link link-hover">Terms of use</a>
+                    <a className="link link-hover">Privacy policy</a>
+                    <a className="link link-hover">Cookie policy</a>
                 </div>
             </div>
             <div className='my-10 text-center'>
-                <p>Copyright © {(new Date().getFullYear())} - All right reserved</p>
+                <p>Copyright © 2022 - All right reserved</p>
             </div>
         </footer>
     );

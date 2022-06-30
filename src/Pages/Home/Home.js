@@ -1,27 +1,22 @@
 import React from 'react';
-import Footer from '../Shared/Footer';
 import Banner from './Banner';
-import ContactForm from './ContactForm';
+import Contact from './Contact';
+import Footer from '../Shared/Footer';
 import Info from './Info';
 import MakeAppointment from './MakeAppointment';
 import Services from './Services';
 import Testimonials from './Testimonials';
 
-
 const Home = () => {
     return (
         <div>
-            <div className='px-12'>
-                <Banner />
-                <Info />
-                <Services />
-            </div>
-            <MakeAppointment />
-            <div className='px-12'>
-                <Testimonials />
-            </div>
-            <ContactForm />
-            <Footer/>
+            <Banner></Banner>
+            <Info></Info>
+            <Services></Services>
+            <MakeAppointment></MakeAppointment>
+            <Testimonials></Testimonials>
+            <Contact></Contact>
+            <Footer></Footer>
         </div>
     );
 };
