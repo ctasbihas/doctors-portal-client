@@ -53,7 +53,7 @@ const AddDoctor = () => {
             })
     }
     return (
-        <div>
+        <div className='w-1/2 mx-auto'>
             <h2 className="text-3xl">Add a new Doctor</h2>
             <form onSubmit={handleSubmit(onSubmit)}>
 
