@@ -108,7 +108,7 @@ const CheckoutForm = ({ appointment }) => {
                         },
                     }}
                 />
-                <button type="submit" disabled={!stripe || !clientSecret} className='btn btn-md btn-success mt-4' >
+                <button type="submit" disabled={!stripe || !clientSecret || success} className='btn btn-md btn-success mt-4' >
                     Pay
                 </button>
             </form>
