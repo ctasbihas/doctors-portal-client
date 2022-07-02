@@ -1,30 +1,31 @@
 import React, { useEffect, useState } from 'react';
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 
-const CheckoutForm = ({appointment}) => {
-    const {price, patient, patientName} = appointment;
+const CheckoutForm = ({ appointment }) => {
+    const { _id, price, patient, patientName } = appointment;
     const stripe = useStripe();
     const elements = useElements();
     const [cardError, setCardError] = useState('');
     const [success, setSuccess] = useState('');
     const [transactionId, setTransactionId] = useState('');
     const [clientSecret, setClientSecret] = useState("");
+    const [processing, setProcessing] = useState(false);
 
     useEffect(() => {
-        fetch('http://localhost:5000/create-payment-intent', {
+        fetch('https://powerful-sea-80000.herokuapp.com/create-payment-intent', {
             method: 'POST',
             headers: {
                 'content-type': 'application/json',
                 'authorization': `Bearer ${localStorage.getItem('accessToken')}`
             },
-            body: JSON.stringify({price})
+            body: JSON.stringify({ price })
         })
-        .then(res => res.json())
+            .then(res => res.json())
             .then(data => {
                 if (data?.clientSecret) {
-                setClientSecret(data.clientSecret)
-            }
-        })
+                    setClientSecret(data.clientSecret)
+                }
+            })
     }, [price]);
 
     const handleSubmit = async (event) => {
@@ -37,13 +38,14 @@ const CheckoutForm = ({appointment}) => {
         if (card === null) {
             return;
         }
-        const { error, paymentMethod} = await stripe.createPaymentMethod({
+        const { error, paymentMethod } = await stripe.createPaymentMethod({
             type: 'card',
             card
         });
-        
+
         setCardError(error?.message || '');
         setSuccess('');
+        setProcessing(true)
 
         // confirm card payment
         const { paymentIntent, error: intentError } = await stripe.confirmCardPayment(
@@ -60,12 +62,31 @@ const CheckoutForm = ({appointment}) => {
         );
         if (intentError) {
             setCardError(intentError?.message)
+            setProcessing(false)
         }
         else {
             setCardError('')
             console.log(paymentIntent);
             setTransactionId(paymentIntent.id);
-            setSuccess('Payment completed.')
+            setSuccess('Payment completed.');
+
+            const payment = {
+                appointment: _id,
+                transactionId: paymentIntent.id
+            };
+            fetch(`https://powerful-sea-80000.herokuapp.com/booking/${_id}`, {
+                method: 'PATCH',
+                headers: {
+                    'content-type': 'application/json',
+                    'authorization': `Bearer ${localStorage.getItem('accessToken')}`
+                },
+                body: JSON.stringify(payment)
+            })
+                .then(res => res.json())
+                .then(data => {
+                    setProcessing(false)
+                    console.log(data)
+                })
         }
     }
     return (
